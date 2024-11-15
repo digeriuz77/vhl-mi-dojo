@@ -1,0 +1,506 @@
+{
+  "change_talk": {
+    "desire": [
+      "want to",
+      "wish",
+      "would like",
+      "hope to",
+      "dream of",
+      "prefer to",
+      "desire to",
+      "aim to",
+      "aspire to",
+      "looking forward to",
+      "excited to",
+      "eager to",
+      "motivated to",
+      "inspired to",
+      "ready to"
+    ],
+    "ability": [
+      "can",
+      "could",
+      "able to",
+      "capable of",
+      "possible",
+      "might be able",
+      "strong enough",
+      "have what it takes",
+      "equipped to",
+      "prepared to",
+      "skilled enough",
+      "qualified to",
+      "competent to",
+      "in a position to"
+    ],
+    "reason": [
+      "because",
+      "reason",
+      "that's why",
+      "so that",
+      "in order to",
+      "for the sake of",
+      "on account of",
+      "due to",
+      "as a result of",
+      "consequently",
+      "therefore",
+      "hence",
+      "for this reason",
+      "makes sense because",
+      "beneficial since"
+    ],
+    "need": [
+      "need to",
+      "have to",
+      "must",
+      "got to",
+      "supposed to",
+      "ought to",
+      "should",
+      "required to",
+      "essential to",
+      "crucial to",
+      "vital to",
+      "imperative to",
+      "necessary to",
+      "important to",
+      "critical to"
+    ],
+    "commitment": [
+      "will",
+      "going to",
+      "plan to",
+      "promise to",
+      "pledge to",
+      "commit to",
+      "dedicate to",
+      "devote to",
+      "guarantee to",
+      "swear to",
+      "vow to",
+      "determine to",
+      "resolve to",
+      "intend to",
+      "mean to"
+    ],
+    "taking_steps": [
+      "started to",
+      "began to",
+      "tried to",
+      "attempted to",
+      "working on",
+      "moving toward",
+      "taking action on",
+      "making progress on",
+      "taking steps toward",
+      "implementing",
+      "initiating",
+      "pursuing",
+      "engaging in",
+      "participating in"
+    ]
+  },
+  "sustain_talk": {
+    "desire": [
+      "don't want",
+      "rather not",
+      "not interested",
+      "hate to",
+      "dislike",
+      "reluctant to",
+      "unwilling to",
+      "against",
+      "opposed to",
+      "averse to",
+      "resistant to",
+      "hesitant to",
+      "uncomfortable with",
+      "not eager to"
+    ],
+    "ability": [
+      "can't",
+      "unable",
+      "impossible",
+      "beyond me",
+      "too hard",
+      "not capable of",
+      "lack the ability",
+      "don't have resources",
+      "not equipped to",
+      "not prepared for",
+      "inadequate to",
+      "insufficient for",
+      "not qualified to",
+      "powerless to"
+    ],
+    "reason": [
+      "because I can't",
+      "too hard",
+      "too difficult",
+      "won't work",
+      "not worth it",
+      "pointless because",
+      "useless since",
+      "futile as",
+      "waste of time because",
+      "no point since",
+      "counterproductive as",
+      "self-defeating because"
+    ],
+    "need": [
+      "don't need",
+      "don't have to",
+      "not necessary",
+      "not required",
+      "no reason to",
+      "no point in",
+      "wouldn't help to",
+      "wasteful to",
+      "pointless to",
+      "unnecessary to",
+      "not essential to"
+    ],
+    "commitment": [
+      "won't",
+      "not going to",
+      "refuse to",
+      "decline to",
+      "never will",
+      "against",
+      "opposed to",
+      "reject",
+      "deny",
+      "resist",
+      "avoid",
+      "prevent",
+      "prohibit",
+      "forbid"
+    ]
+  },
+  "reflection_indicators": {
+    "simple": [
+      "it sounds like",
+      "you're feeling",
+      "you mean",
+      "in other words",
+      "let me see if I understand",
+      "what I hear you saying",
+      "if I understand correctly",
+      "sounds as though",
+      "seems that",
+      "I hear that",
+      "you're saying",
+      "so you",
+      "you feel",
+      "you think",
+      "you believe"
+    ],
+    "complex": [
+      "could it be that",
+      "I wonder if",
+      "perhaps you're feeling",
+      "on one hand... on the other hand",
+      "it seems like maybe",
+      "what I'm hearing underneath is",
+      "the bigger picture might be",
+      "I get the sense that",
+      "correct me if I'm wrong but",
+      "my sense is that",
+      "what lies beneath",
+      "deeper meaning"
+    ]
+  },
+  "mi_adherent_phrases": {
+    "seeking_collaboration": [
+      "what do you think",
+      "how do you feel",
+      "tell me more",
+      "help me understand",
+      "I wonder if you would be willing",
+      "would it be alright if",
+      "would you be interested in",
+      "what are your thoughts about",
+      "how does that sound to you",
+      "what would you like to focus on"
+    ],
+    "affirming": [
+      "I appreciate your",
+      "you're showing real",
+      "that took a lot of",
+      "you've made great progress",
+      "you're very good at",
+      "I respect your",
+      "you've worked really hard",
+      "that's a great observation",
+      "you make a good point",
+      "you've overcome a lot"
+    ],
+    "emphasizing_autonomy": [
+      "that's up to you",
+      "you know yourself best",
+      "it's your choice",
+      "you're the expert on your own life",
+      "only you can decide",
+      "you're in charge of your own decisions",
+      "you have the right to",
+      "you get to choose what's best for you",
+      "no one can make this decision but you",
+      "you're free to decide"
+    ]
+  },
+  "mi_nonadherent_phrases": {
+    "confronting": [
+      "you're in denial",
+      "you have to",
+      "you better",
+      "you must",
+      "you need to",
+      "you should",
+      "why don't you just",
+      "you're being unrealistic",
+      "the problem is",
+      "what's wrong with you"
+    ],
+    "persuading": [
+      "let me convince you",
+      "trust me",
+      "believe me",
+      "I know what's best",
+      "I'm telling you",
+      "you have no choice",
+      "you can't continue to",
+      "the only way is",
+      "you've got to see that",
+      "take my word for it"
+    ]
+  },
+  "global_rating_scales": {
+    "scoring_criteria": {
+      "1": {
+        "description": "Clinician shows no explicit attention or lowest skill level",
+        "indicators": [
+          "actively assumes expert role",
+          "gives little attention to client perspective",
+          "shows no explicit attention to change language",
+          "consistently responds to sustain talk"
+        ]
+      },
+      "2": {
+        "description": "Clinician shows occasional attention with limited skill",
+        "indicators": [
+          "superficially responds to opportunities",
+          "makes sporadic efforts to understand",
+          "occasionally attends to change language",
+          "usually focuses on sustain talk"
+        ]
+      },
+      "3": {
+        "description": "Clinician shows moderate attention and skill",
+        "indicators": [
+          "incorporates client contributions inconsistently",
+          "actively tries to understand perspective",
+          "sometimes misses opportunities",
+          "gives mixed attention to change/sustain talk"
+        ]
+      },
+      "4": {
+        "description": "Clinician shows consistent attention and good skill",
+        "indicators": [
+          "fosters collaboration effectively",
+          "makes active efforts to understand",
+          "consistently attends to change talk",
+          "typically avoids emphasizing sustain talk"
+        ]
+      },
+      "5": {
+        "description": "Clinician shows consistent attention and exceptional skill",
+        "indicators": [
+          "actively fosters power sharing",
+          "shows deep understanding",
+          "demonstrates marked effort to increase change talk",
+          "shows marked effort to soften sustain talk"
+        ]
+      }
+    }
+  },
+  "global_rating_indicators": {
+    "cultivating_change_talk": {
+      "high_scores": [
+        "consistently attends to change talk",
+        "actively encourages deeper exploration",
+        "strategic evocation of change talk",
+        "reinforces change talk through reflections",
+        "structures therapeutic tasks to elicit change talk"
+      ],
+      "low_scores": [
+        "misses opportunities to explore change",
+        "focuses primarily on problems",
+        "minimal attention to change language",
+        "emphasizes barriers over solutions",
+        "neglects client values and hopes"
+      ]
+    },
+    "softening_sustain_talk": {
+      "high_scores": [
+        "skillfully redirects sustain talk",
+        "acknowledges without reinforcing",
+        "shifts focus to change possibilities",
+        "avoids elaborating barriers",
+        "strategic responses to minimize sustain talk"
+      ],
+      "low_scores": [
+        "actively explores barriers",
+        "elicits reasons against change",
+        "focuses on difficulties",
+        "reinforces sustain talk",
+        "dwells on obstacles"
+      ]
+    },
+    "partnership": {
+      "high_scores": [
+        "promotes power sharing",
+        "encourages collaboration",
+        "seeks client input",
+        "avoids expert role",
+        "validates client expertise"
+      ],
+      "low_scores": [
+        "assumes authority",
+        "prescribes solutions",
+        "dismisses client ideas",
+        "dominates conversation",
+        "enforces agenda"
+      ]
+    },
+    "empathy": {
+      "high_scores": [
+        "demonstrates deep understanding",
+        "accurately reflects meaning",
+        "shows genuine curiosity",
+        "communicates acceptance",
+        "recognizes unspoken emotions"
+      ],
+      "low_scores": [
+        "superficial understanding",
+        "misses key points",
+        "dismisses feelings",
+        "minimal interest in perspective",
+        "focuses only on facts"
+      ]
+    }
+  },
+  "session_structure_elements": {
+    "engagement_phase": [
+      "establishing rapport",
+      "setting agenda",
+      "exploring client perspective",
+      "identifying target behaviors"
+    ],
+    "focusing_phase": [
+      "clarifying goals",
+      "establishing priorities",
+      "identifying target change",
+      "developing change plans"
+    ],
+    "evoking_phase": [
+      "eliciting change talk",
+      "exploring ambivalence",
+      "developing discrepancy",
+      "building confidence"
+    ],
+    "planning_phase": [
+      "establishing commitment",
+      "developing specific plans",
+      "identifying resources",
+      "addressing barriers"
+    ]
+  },
+  "quality_metrics": {
+    "basic_competence_thresholds": {
+      "relational_global": "3.5",
+      "technical_global": "3.0",
+      "percent_complex_reflections": "40",
+      "reflection_question_ratio": "1:1"
+    },
+    "proficiency_thresholds": {
+      "relational_global": "4.0",
+      "technical_global": "4.0",
+      "percent_complex_reflections": "50",
+      "reflection_question_ratio": "2:1"
+    },
+    "fidelity_monitoring": {
+      "recommended_coding_frequency": "20% of sessions",
+      "minimum_coded_duration": "20 minutes",
+      "random_segment_selection": true,
+      "multiple_coder_agreement": "recommended"
+    }
+  },
+  "behavioral_count_special_cases": {
+    "parsing_rules": [
+      "one code per utterance",
+      "complex reflection trumps simple reflection",
+      "only one question code per volley",
+      "maximum 8 codes per volley"
+    ],
+    "non_coded_elements": [
+      "structuring statements",
+      "greetings",
+      "facilitative statements",
+      "previous session content",
+      "incomplete thoughts",
+      "off-topic material"
+    ],
+    "combination_scenarios": {
+      "reflection_question": "both coded if checking accuracy",
+      "multiple_reflections": "code most complex only",
+      "mia_combinations": "code all unique MIA behaviors"
+    }
+  },
+  "context_specific_examples": {
+    "health_behaviors": {
+      "medication_adherence": {
+        "change_talk": [
+          "I know I need to take my medicine regularly",
+          "I could set an alarm to remember"
+        ],
+        "sustain_talk": [
+          "The side effects are too difficult",
+          "I keep forgetting to take them"
+        ]
+      },
+      "diet_changes": {
+        "change_talk": [
+          "I want to eat more vegetables",
+          "I could plan my meals better"
+        ],
+        "sustain_talk": [
+          "Healthy food is too expensive",
+          "I don't have time to cook"
+        ]
+      }
+    },
+    "substance_use": {
+      "alcohol": {
+        "change_talk": [
+          "I need to cut back on drinking",
+          "My family would be happier if I quit"
+        ],
+        "sustain_talk": [
+          "I can control my drinking",
+          "Everyone I know drinks this much"
+        ]
+      },
+      "smoking": {
+        "change_talk": [
+          "I want to quit for my health",
+          "I could save so much money"
+        ],
+        "sustain_talk": [
+          "Smoking helps me deal with stress",
+          "I've tried to quit before and failed"
+        ]
+      }
+    }
+  }
+}

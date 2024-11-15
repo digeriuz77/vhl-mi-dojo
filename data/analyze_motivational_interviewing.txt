@@ -1,0 +1,79 @@
+{
+  "name": "analyze_motivational_interviewing",
+  "description": "Analyze a message for Motivational Interviewing (MI) adherence and provide detailed metrics",
+  "strict": true,
+  "parameters": {
+    "type": "object",
+    "required": [
+      "reflection_to_question_ratio",
+      "percent_complex_reflections",
+      "percent_open_questions",
+      "mi_adherent_statements",
+      "mi_non_adherent_statements",
+      "overall_adherence_score",
+      "spirit_of_mi_adherence",
+      "change_talk_identification",
+      "reasoning"
+    ],
+    "properties": {
+      "reflection_to_question_ratio": {
+        "type": "number",
+        "description": "Ratio of reflections to questions"
+      },
+      "percent_complex_reflections": {
+        "type": "number",
+        "description": "Percentage of reflections that are complex"
+      },
+      "percent_open_questions": {
+        "type": "number",
+        "description": "Percentage of questions that are open-ended"
+      },
+      "mi_adherent_statements": {
+        "type": "integer",
+        "description": "Count of MI adherent statements"
+      },
+      "mi_non_adherent_statements": {
+        "type": "integer",
+        "description": "Count of MI non-adherent statements"
+      },
+      "overall_adherence_score": {
+        "type": "number",
+        "description": "Overall MI adherence score (1-5 scale)"
+      },
+      "spirit_of_mi_adherence": {
+        "type": "number",
+        "description": "How well the message adheres to the spirit of MI (1-5 scale)"
+      },
+      "change_talk_identification": {
+        "type": "object",
+        "properties": {
+          "preparatory": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Identified preparatory change talk statements"
+          },
+          "mobilizing": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Identified mobilizing change talk statements"
+          }
+        },
+        "description": "Identified change talk in the message",
+        "additionalProperties": false,
+        "required": [
+          "preparatory",
+          "mobilizing"
+        ]
+      },
+      "reasoning": {
+        "type": "string",
+        "description": "Explanation of the reasoning behind each metric"
+      }
+    },
+    "additionalProperties": false
+  }
+}

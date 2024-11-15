@@ -4,12 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Markdown from "react-markdown";
 import { MIMetrics as MIMetricsComponent } from "./MIMetrics";
 import PersonaCreationForm from "./PersonaCreationForm";
-import { MIMetrics } from "@/types";
-
-type MessageProps = {
-  role: "user" | "assistant" | "code";
-  text: string;
-};
+import { Message, MIMetrics } from "@/types";
 
 interface ApiResponse {
   type: string;
@@ -41,14 +36,14 @@ const CodeMessage = ({ text }: { text: string }) => (
   </div>
 );
 
-const Message = ({ role, text }: MessageProps) => {
+const MessageComponent = ({ role, content }: Message) => {
   switch (role) {
     case "user":
-      return <UserMessage text={text} />;
+      return <UserMessage text={content} />;
     case "assistant":
-      return <AssistantMessage text={text} />;
+      return <AssistantMessage text={content} />;
     case "code":
-      return <CodeMessage text={text} />;
+      return <CodeMessage text={content} />;
     default:
       return null;
   }
@@ -56,7 +51,7 @@ const Message = ({ role, text }: MessageProps) => {
 
 export default function Chat() {
   const [userInput, setUserInput] = useState("");
-  const [messages, setMessages] = useState<MessageProps[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [threadId, setThreadId] = useState<string | null>(null);
   const [personaId, setPersonaId] = useState<string | null>(null);
@@ -105,7 +100,7 @@ export default function Chat() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: userMessage }),
+        body: JSON.stringify({ message: userMessage, threadId }),
       });
 
       if (!response.ok) {
@@ -114,7 +109,12 @@ export default function Chat() {
       }
 
       const data = await response.json();
-      setMiMetrics(data.analysis);
+      const analysis: MIMetrics = data.data;
+      setMiMetrics(analysis);
+
+      if (data.threadId && !threadId) {
+        setThreadId(data.threadId);
+      }
     } catch (error: any) {
       console.error("Error analyzing MI metrics:", error);
       // Handle error (e.g., display an error message to the user)
@@ -125,7 +125,7 @@ export default function Chat() {
     try {
       setIsLoading(true);
 
-      setMessages((prev) => [...prev, { role: "user", text }]);
+      setMessages((prev) => [...prev, { role: "user", content: text }]);
 
       console.log("Sending message:", text); // Debug log
 
@@ -148,7 +148,7 @@ export default function Chat() {
       if (!reader) throw new Error("No reader available");
 
       let assistantMessage = "";
-      setMessages((prev) => [...prev, { role: "assistant", text: "" }]);
+      setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
 
       const decoder = new TextDecoder();
       let buffer = "";
@@ -183,7 +183,7 @@ export default function Chat() {
                     const newMessages = [...prev];
                     newMessages[newMessages.length - 1] = {
                       role: "assistant",
-                      text: assistantMessage,
+                      content: assistantMessage,
                     };
                     return newMessages;
                   });
@@ -206,7 +206,7 @@ export default function Chat() {
         ...prev,
         {
           role: "assistant",
-          text: `An error occurred: ${error.message}`,
+          content: `An error occurred: ${error.message}`,
         },
       ]);
     } finally {
@@ -255,7 +255,7 @@ export default function Chat() {
       {/* Chat Messages */}
       <div className="flex-grow overflow-y-auto p-4 space-y-4 bg-white dark:bg-gray-800">
         {messages.map((msg, index) => (
-          <Message key={`message-${index}`} role={msg.role} text={msg.text} />
+          <MessageComponent key={`message-${index}`} role={msg.role} content={msg.content} />
         ))}
         <div ref={messagesEndRef} />
       </div>

@@ -1,12 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import OpenAI from 'openai';
-import { put, get } from '@vercel/blob';
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
+import { MIMetrics } from '@/types';
+import { storeInBlobStorage, retrieveFromBlobStorage } from '@/utils/blobStorage';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const ASSISTANT_ID = process.env.ASSISTANT_ID;
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+const ASSISTANT_ID = process.env.ASSISTANT_ID!;
 
 if (!process.env.OPENAI_API_KEY || !ASSISTANT_ID) {
   throw new Error('OPENAI_API_KEY or ASSISTANT_ID is not set in environment variables');
@@ -48,8 +49,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { message, threadId } = req.body;
 
-  if (!message) {
-    return res.status(400).json({ error: 'Message is required' });
+  if (!message || typeof message !== 'string') {
+    return res.status(400).json({ error: 'Message is required and must be a string' });
   }
 
   try {
@@ -57,16 +58,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const cacheKey = `mi_analysis_${hash}.json`;
 
     // Check cache
-    try {
-      const response = await get(cacheKey);
-      if (response && response.status === 200) {
-        const cachedAnalysis = await response.json();
-        if (cachedAnalysis) {
-          return res.status(200).json({ data: cachedAnalysis });
-        }
-      }
-    } catch (error) {
-      console.error('Error retrieving from Blob storage:', error);
+    const cachedAnalysis = await retrieveFromBlobStorage<MIMetrics>(cacheKey);
+    if (cachedAnalysis) {
+      return res.status(200).json({ data: cachedAnalysis });
     }
 
     let thread;
@@ -95,10 +89,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         2. Spirit of MI: ${spiritOfMI}
         3. MI Knowledge Base: ${miKnowledgeBase}
         
-        Use the analyze_motivational_interviewing function to provide a structured analysis.
+        Provide a structured analysis using the analyze_motivational_interviewing function.
       `,
-      functions: [analyzeMIFunctionDefinition],
-      function_call: { name: 'analyze_motivational_interviewing' },
     });
 
     const maxRetries = 30;
@@ -118,24 +110,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const messages = await openai.beta.threads.messages.list(thread.id);
     const analysisMessage = messages.data.find(message => message.role === "assistant");
 
-    if (!analysisMessage || !analysisMessage.function_call) {
-      throw new Error('No analysis or function call found');
+    if (!analysisMessage || !analysisMessage.content || analysisMessage.content.length === 0) {
+      throw new Error('No analysis found');
     }
 
-    let analysis;
+    let analysis: MIMetrics;
     try {
-      analysis = JSON.parse(analysisMessage.function_call.arguments);
+      const content = analysisMessage.content[0] as { text: { value: string } };
+      analysis = JSON.parse(content.text.value) as MIMetrics;
     } catch (parseError) {
-      console.error('Error parsing function arguments:', parseError);
+      console.error('Error parsing analysis results:', parseError);
       return res.status(500).json({ error: 'Error parsing analysis results' });
     }
 
     // Store the result in Blob storage
-    try {
-      await put(cacheKey, JSON.stringify(analysis), { access: 'private' });
-    } catch (error) {
-      console.error('Error storing in Blob storage:', error);
-    }
+    await storeInBlobStorage(cacheKey, analysis);
 
     res.status(200).json({ data: analysis, threadId: thread.id });
   } catch (error) {

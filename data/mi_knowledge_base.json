@@ -1,0 +1,1045 @@
+{
+  "metadata": {
+    "description": "Combined Motivational Interviewing Knowledge Base",
+    "version": "1.0"
+  },
+  "change_talk_resistance": {
+    "change_talk_dynamics": {
+      "types": {
+        "preparatory_change_talk": {
+          "desire": {
+            "description": "Statements expressing wanting, wishing, or hoping for change",
+            "examples": [
+              {
+                "client_statement": "I wish I could get control of this.",
+                "strength": "moderate",
+                "notes": "Expresses desire without commitment"
+              }
+            ],
+            "recognition_features": [
+              "Want statements",
+              "Wish statements",
+              "Hope expressions",
+              "Liking/disliking current situation"
+            ]
+          },
+          "ability": {
+            "description": "Statements about capability to change",
+            "examples": [
+              {
+                "client_statement": "I could probably cut down if I really tried.",
+                "strength": "moderate",
+                "notes": "Acknowledges capability with qualification"
+              }
+            ],
+            "recognition_features": [
+              "Can statements",
+              "Could statements",
+              "Ability expressions",
+              "Past success references"
+            ]
+          },
+          "reasons": {
+            "description": "Specific arguments for change",
+            "examples": [
+              {
+                "client_statement": "My blood pressure would probably go down if I quit.",
+                "strength": "high",
+                "notes": "Specific health benefit identified"
+              }
+            ],
+            "recognition_features": [
+              "Because statements",
+              "If-then statements",
+              "Benefit identification",
+              "Problem recognition"
+            ]
+          },
+          "need": {
+            "description": "Expressions of necessity/urgency",
+            "examples": [
+              {
+                "client_statement": "I've got to do something about this.",
+                "strength": "high",
+                "notes": "Clear expression of necessity"
+              }
+            ],
+            "recognition_features": [
+              "Need statements",
+              "Must statements",
+              "Have to expressions",
+              "Urgency indicators"
+            ]
+          }
+        },
+        "commitment_language": {
+          "description": "Statements indicating decision/intention to change",
+          "strength_levels": {
+            "weak": {
+              "examples": [
+                "I'll think about it",
+                "Maybe I'll try",
+                "I might do that"
+              ],
+              "features": [
+                "Tentative language",
+                "Future focus",
+                "Qualifiers present"
+              ]
+            },
+            "moderate": {
+              "examples": [
+                "I'm planning to",
+                "I intend to",
+                "I'll probably"
+              ],
+              "features": [
+                "More definite language",
+                "Near-future focus",
+                "Some qualification"
+              ]
+            },
+            "strong": {
+              "examples": [
+                "I will",
+                "I'm going to",
+                "I've decided to"
+              ],
+              "features": [
+                "Definite language",
+                "Present/immediate focus",
+                "Clear commitment"
+              ]
+            }
+          }
+        }
+      },
+      "sustain_talk": {
+        "description": "Language favoring status quo or against change",
+        "categories": {
+          "desire_to_maintain": {
+            "examples": [
+              "I like drinking",
+              "I don't want to quit"
+            ]
+          },
+          "inability": {
+            "examples": [
+              "I can't do it",
+              "It's too hard"
+            ]
+          },
+          "reasons_against": {
+            "examples": [
+              "It helps me relax",
+              "I need it to cope"
+            ]
+          },
+          "need_to_maintain": {
+            "examples": [
+              "I have to keep drinking",
+              "I can't live without it"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "core_response": {
+    "metadata": {
+      "description": "Comprehensive classification of motivational interviewing responses and patterns",
+      "version": "2.0",
+      "usage": "Training and pattern recognition for MI practitioners",
+      "key_source": "MINT Training Manual 2014"
+    },
+    "core_response_types": {
+      "reflective_listening": {
+        "description": "Practitioner statements that capture and express understanding of client meaning",
+        "levels": {
+          "simple_reflection": {
+            "description": "Repeating or slightly rephrasing client's statements",
+            "key_features": [
+              "Stays close to client's original words",
+              "Maintains same level of meaning",
+              "Often uses similar vocabulary",
+              "May slightly rearrange sentence structure"
+            ],
+            "examples": [
+              {
+                "client": "I don't think I drink that much really.",
+                "practitioner": "You don't think your drinking is excessive.",
+                "notes": "Maintains core meaning with slight rephrasing"
+              },
+              {
+                "client": "The blackouts scare me.",
+                "practitioner": "You're frightened by the blackouts.",
+                "notes": "Simple emotion reflection"
+              }
+            ],
+            "timing_guidance": [
+              "Most appropriate early in conversation",
+              "Useful when building initial rapport",
+              "Helpful when meaning is unclear",
+              "Good foundation before moving to complex reflections"
+            ]
+          },
+          "complex_reflection": {
+            "description": "Adds substantial meaning or makes inferences beyond client's stated words",
+            "key_features": [
+              "Captures underlying meaning",
+              "Makes informed guesses about deeper significance",
+              "Often uses different vocabulary",
+              "May connect different elements client has shared"
+            ],
+            "subtypes": {
+              "amplified_reflection": {
+                "description": "Overstates or exaggerates client's meaning to elicit clarification",
+                "examples": [
+                  {
+                    "client": "I probably drink too much sometimes.",
+                    "practitioner": "So you're completely out of control with alcohol.",
+                    "notes": "Intentional overstatement to allow client correction"
+                  }
+                ]
+              },
+              "double_sided_reflection": {
+                "description": "Captures both sides of client's ambivalence",
+                "examples": [
+                  {
+                    "client": "I know I should quit smoking but I really enjoy it.",
+                    "practitioner": "On one hand smoking gives you pleasure, and at the same time you have concerns about it.",
+                    "notes": "Acknowledges both motivation and barriers"
+                  }
+                ]
+              },
+              "continuing_the_paragraph": {
+                "description": "Anticipates next logical element of client's narrative",
+                "examples": [
+                  {
+                    "client": "Every morning I wake up feeling awful.",
+                    "practitioner": "And you're wondering if that's connected to your drinking.",
+                    "notes": "Makes logical inference about connection"
+                  }
+                ]
+              }
+            },
+            "timing_guidance": [
+              "More appropriate after building rapport",
+              "Use when meaning becomes clearer",
+              "Particularly useful for highlighting change talk",
+              "Best employed once trust is established"
+            ]
+          }
+        }
+      },
+      "questions": {
+        "open_questions": {
+          "description": "Questions that invite elaboration and cannot be answered with yes/no",
+          "key_features": [
+            "Begin with how, what, why, tell me about",
+            "Allow client to direct response content",
+            "Encourage deeper exploration",
+            "Support client autonomy"
+          ],
+          "categories": {
+            "evocative_questions": {
+              "description": "Questions specifically designed to elicit change talk",
+              "examples": [
+                {
+                  "question": "What concerns you about your current situation?",
+                  "purpose": "Elicit problem recognition"
+                },
+                {
+                  "question": "How would you like things to be different?",
+                  "purpose": "Elicit desire for change"
+                },
+                {
+                  "question": "What are the most important reasons you might want to make this change?",
+                  "purpose": "Elicit motivation"
+                }
+              ]
+            },
+            "elaboration_questions": {
+              "description": "Questions that invite deeper exploration of a topic",
+              "examples": [
+                {
+                  "question": "Tell me more about that.",
+                  "purpose": "General elaboration"
+                },
+                {
+                  "question": "What else have you noticed?",
+                  "purpose": "Broaden exploration"
+                }
+              ]
+            }
+          }
+        },
+        "closed_questions": {
+          "description": "Questions with limited response options, often yes/no",
+          "appropriate_uses": [
+            "Gathering specific information",
+            "Clarifying understanding",
+            "Focusing conversation"
+          ],
+          "cautions": [
+            "Can lead to question-answer trap",
+            "May limit client exploration",
+            "Can shift focus from client to practitioner agenda"
+          ]
+        }
+      }
+    }
+  },
+  "exploring_ambivalance": {
+    "ambivalence_exploration": {
+      "description": "Systematic exploration of client ambivalence through structured dialogue",
+      "change_status_categories": {
+        "status_quo": {
+          "description": "Exploring current behavior maintenance",
+          "exploration_areas": {
+            "benefits": {
+              "description": "Exploring positive aspects of not changing",
+              "example_sequence": {
+                "practitioner_prompt": "So tell me what's good about not exercising?",
+                "typical_responses": [
+                  "No energy required",
+                  "Don't have to make time",
+                  "Can stay comfortable",
+                  "No pressure or expectations"
+                ],
+                "practitioner_strategies": [
+                  "Use open questions to explore benefits",
+                  "Reflect understanding without reinforcing",
+                  "Listen for embedded change talk",
+                  "Note ambivalence markers"
+                ]
+              }
+            },
+            "costs": {
+              "description": "Exploring negative aspects of not changing",
+              "example_sequence": {
+                "initial_prompt": "Tell me what you dislike about not exercising?",
+                "follow_up_strategies": [
+                  {
+                    "prompt": "Anything else?",
+                    "purpose": "Deepen exploration of costs"
+                  },
+                  {
+                    "prompt": "You sound pretty tired and overwhelmed already. What else?",
+                    "purpose": "Connect current symptoms to behavior"
+                  }
+                ],
+                "typical_themes": [
+                  "Health consequences",
+                  "Emotional costs",
+                  "Lost benefits of previous change",
+                  "Identity conflicts"
+                ]
+              }
+            }
+          }
+        },
+        "change_consideration": {
+          "description": "Exploring potential behavior change",
+          "exploration_areas": {
+            "barriers": {
+              "description": "Exploring challenges of making change",
+              "example_sequence": {
+                "practitioner_prompt": "Imagine you did decide to start. What would be hard, get in the way?",
+                "common_barriers": [
+                  "Current fitness level",
+                  "Social discomfort",
+                  "Time management",
+                  "Self-image concerns"
+                ],
+                "practitioner_responses": {
+                  "reflection_examples": [
+                    "So it would be hard to call old running friends because they'd look down on you?",
+                    "You mentioned time as a problem"
+                  ],
+                  "purpose": "Acknowledge barriers while listening for change talk"
+                }
+              }
+            },
+            "benefits": {
+              "description": "Exploring positive aspects of making change",
+              "example_sequence": {
+                "practitioner_prompt": "So if you did start and kept it up, what would that be like?",
+                "follow_up_strategies": [
+                  {
+                    "prompt": "Anything else?",
+                    "purpose": "Gather additional benefits"
+                  },
+                  {
+                    "prompt": "It felt good physically. Do you remember what your mood was like when you were exercising?",
+                    "purpose": "Explore additional benefit domains"
+                  }
+                ],
+                "benefit_categories": {
+                  "physical": [
+                    "More energy",
+                    "Better fitness",
+                    "Weight management"
+                  ],
+                  "emotional": [
+                    "Improved mood",
+                    "Better self-image",
+                    "Increased confidence"
+                  ],
+                  "lifestyle": [
+                    "More active social life",
+                    "Broader range of activities",
+                    "Increased engagement"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "practitioner_guidance": {
+        "sequence_management": {
+          "description": "Strategic management of exploration sequence",
+          "key_principles": [
+            "Start with current behavior exploration",
+            "Balance discussion of pros and cons",
+            "Listen for natural transition points",
+            "Follow client's energy and engagement"
+          ],
+          "transition_strategies": {
+            "status_quo_to_change": {
+              "markers": [
+                "Expression of dissatisfaction",
+                "Reference to past success",
+                "Mention of change possibilities"
+              ],
+              "example_transitions": [
+                "You mentioned feeling differently when you were exercising...",
+                "Tell me more about when you were running before..."
+              ]
+            }
+          }
+        },
+        "response_patterns": {
+          "sustain_talk_management": {
+            "example_sequence": [
+              {
+                "client": "I just don't have the energy; it's hard to get started",
+                "practitioner": "You sound pretty tired and overwhelmed already",
+                "strategy": "Acknowledge current state without reinforcing barrier"
+              }
+            ]
+          },
+          "change_talk_reinforcement": {
+            "example_sequence": [
+              {
+                "client": "I used to run before work, it wasn't that bad once I started",
+                "practitioner": "So if you did start and kept it up, what would that be like?",
+                "strategy": "Build on past success reference to explore change benefits"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "group_applications_modifiers": {
+    "group_applications": {
+      "core_principles": {
+        "description": "Fundamental aspects of MI in group settings",
+        "key_elements": [
+          "Maintain MI spirit with multiple clients",
+          "Balance individual and group needs",
+          "Foster group member interaction",
+          "Manage group dynamics"
+        ]
+      },
+      "facilitation_strategies": {
+        "engagement": {
+          "methods": [
+            "Round-robin sharing",
+            "Paired exercises",
+            "Small group discussion",
+            "Full group processing"
+          ],
+          "guidelines": [
+            "Ensure all members have opportunity to participate",
+            "Protect member autonomy",
+            "Foster safe environment",
+            "Build group cohesion"
+          ]
+        },
+        "change_talk_management": {
+          "strategies": {
+            "direct_methods": [
+              "Selective reflection of change talk",
+              "Invitation for elaboration",
+              "Connecting similar themes",
+              "Summarizing group change talk"
+            ],
+            "indirect_methods": [
+              "Member-to-member discussion",
+              "Shared experience exploration",
+              "Group problem-solving",
+              "Collective brainstorming"
+            ]
+          }
+        }
+      },
+      "special_considerations": {
+        "diversity_factors": {
+          "cultural_considerations": {
+            "elements": [
+              "Language adaptations",
+              "Cultural value recognition",
+              "Communication style differences",
+              "Group norm variations"
+            ]
+          },
+          "age_specific": {
+            "adolescents": {
+              "considerations": [
+                "Peer influence management",
+                "Authority sensitivity",
+                "Identity development focus",
+                "Concrete thinking adaptation"
+              ]
+            },
+            "older_adults": {
+              "considerations": [
+                "Life experience recognition",
+                "Physical limitation accommodation",
+                "Cognitive processing pace",
+                "Loss/transition sensitivity"
+              ]
+            }
+          },
+          "special_populations": {
+            "mandated_clients": {
+              "strategies": [
+                "External pressure acknowledgment",
+                "Choice emphasis within constraints",
+                "Resistance anticipation",
+                "Autonomy support within limits"
+              ]
+            },
+            "dual_diagnosis": {
+              "considerations": [
+                "Complexity recognition",
+                "Integrated treatment approach",
+                "Safety monitoring",
+                "Progress pace adaptation"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Intervention": {
+    "intervention_strategies": {
+      "resistance_management": {
+        "description": "Approaches for working with client resistance/discord",
+        "core_principles": [
+          "Roll with resistance rather than opposing it",
+          "Avoid argumentation",
+          "Redirect momentum",
+          "Explore rather than correct"
+        ],
+        "specific_techniques": {
+          "simple_reflection": {
+            "description": "Straightforward reflection of resistant statement",
+            "purpose": "Demonstrate understanding without reinforcing",
+            "examples": [
+              {
+                "client": "You can't tell me what to do.",
+                "practitioner": "You want to make your own decisions.",
+                "notes": "Captures core meaning without confrontation"
+              }
+            ]
+          },
+          "amplified_reflection": {
+            "description": "Reflection that slightly exaggerates resistance",
+            "purpose": "Create space for client to argue other side",
+            "examples": [
+              {
+                "client": "I don't really drink that much.",
+                "practitioner": "There's absolutely nothing about your drinking that concerns you.",
+                "notes": "Slight exaggeration invites moderation"
+              }
+            ]
+          },
+          "double_sided_reflection": {
+            "description": "Reflection incorporating both sides of ambivalence",
+            "purpose": "Acknowledge resistance while highlighting change talk",
+            "examples": [
+              {
+                "client": "I know I should quit but I really enjoy smoking.",
+                "practitioner": "You enjoy smoking AND you have some concerns about it.",
+                "notes": "Captures both sides with emphasis on change aspect"
+              }
+            ]
+          },
+          "shifting_focus": {
+            "description": "Temporarily moving away from resistant topic",
+            "purpose": "Reduce opposition by changing subject",
+            "examples": [
+              {
+                "situation": "Strong resistance to discussing alcohol use",
+                "response": "What other concerns would you like to discuss today?",
+                "notes": "Allows productive conversation to continue"
+              }
+            ]
+          },
+          "reframing": {
+            "description": "Offering alternative interpretation",
+            "purpose": "Present new perspective on situation",
+            "examples": [
+              {
+                "client": "I've tried to quit so many times and failed.",
+                "practitioner": "You're persistent in working on this challenge.",
+                "notes": "Reframes failure as determination"
+              }
+            ]
+          },
+          "emphasizing_autonomy": {
+            "description": "Explicitly acknowledging client choice/control",
+            "purpose": "Reduce resistance by removing pressure",
+            "examples": [
+              {
+                "client": "Everyone's trying to make me quit.",
+                "practitioner": "This is completely your choice to make.",
+                "notes": "Removes external pressure"
+              }
+            ]
+          }
+        }
+      },
+      "change_talk_cultivation": {
+        "description": "Strategies for evoking and strengthening change talk",
+        "evocation_techniques": {
+          "importance_rulers": {
+            "description": "Numerical scaling questions about importance of change",
+            "format": "Scale of 0-10 questions",
+            "key_questions": [
+              "How important is it to you to make this change?",
+              "Why are you at X and not lower?",
+              "What would it take to get to a higher number?"
+            ]
+          },
+          "confidence_rulers": {
+            "description": "Numerical scaling questions about confidence in ability to change",
+            "format": "Scale of 0-10 questions",
+            "key_questions": [
+              "How confident are you that you could make this change?",
+              "What makes you a X and not lower?",
+              "What would help you feel more confident?"
+            ]
+          },
+          "looking_forward": {
+            "description": "Questions about future scenarios",
+            "examples": [
+              "What would be different if you made this change?",
+              "How would you like things to be in 5 years?",
+              "What concerns you about continuing as things are?"
+            ]
+          },
+          "looking_back": {
+            "description": "Questions about past experiences",
+            "examples": [
+              "What was different before this became a concern?",
+              "Tell me about previous successes with change.",
+              "What have you learned from past attempts?"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "MI_Spirit_process": {
+    "mi_spirit": {
+      "core_elements": {
+        "partnership": {
+          "description": "Collaborative relationship between practitioner and client",
+          "key_features": [
+            "Power sharing",
+            "Mutual exploration",
+            "Avoidance of expert role",
+            "Client as expert on self"
+          ],
+          "behavioral_markers": {
+            "positive_indicators": [
+              "Asking permission before giving advice",
+              "Using inclusive language (we, let's explore)",
+              "Acknowledging client expertise",
+              "Offering choices and options"
+            ],
+            "negative_indicators": [
+              "Assuming authority position",
+              "Giving unsolicited advice",
+              "Dismissing client views",
+              "Taking expert stance"
+            ]
+          }
+        },
+        "acceptance": {
+          "description": "Fundamental respect for client worth and potential",
+          "components": {
+            "absolute_worth": {
+              "description": "Unconditional positive regard for client",
+              "examples": [
+                "Maintaining respect despite disagreement",
+                "Avoiding judgment of choices",
+                "Expressing genuine care"
+              ]
+            },
+            "accurate_empathy": {
+              "description": "Active interest in understanding client's perspective",
+              "indicators": [
+                "Careful listening",
+                "Checking understanding",
+                "Showing genuine curiosity",
+                "Reflecting deeper meaning"
+              ]
+            },
+            "autonomy_support": {
+              "description": "Honoring client's right and capacity for self-direction",
+              "examples": [
+                "Emphasizing personal choice",
+                "Respecting decisions",
+                "Supporting self-determination"
+              ]
+            },
+            "affirmation": {
+              "description": "Acknowledging client strengths and efforts",
+              "examples": [
+                "Noticing positive steps",
+                "Highlighting capabilities",
+                "Recognizing good intentions"
+              ]
+            }
+          }
+        },
+        "evocation": {
+          "description": "Drawing out rather than imposing ideas",
+          "key_principles": [
+            "Resources and motivation reside within client",
+            "Client insights are more powerful than practitioner insights",
+            "Drawing out is more effective than putting in",
+            "Client is source of solutions"
+          ],
+          "techniques": {
+            "asking_vs_telling": {
+              "description": "Preference for eliciting over educating",
+              "examples": [
+                "What do you already know about...?",
+                "What ideas do you have about...?",
+                "What has worked for you before?"
+              ]
+            },
+            "exploring_motivations": {
+              "description": "Helping client articulate own reasons for change",
+              "methods": [
+                "Looking forward questions",
+                "Values exploration",
+                "Goal clarification",
+                "Past success examination"
+              ]
+            }
+          }
+        },
+        "compassion": {
+          "description": "Active promotion of client welfare",
+          "manifestations": {
+            "verbal": [
+              "Expressions of genuine concern",
+              "Acknowledgment of difficulty",
+              "Support during struggles",
+              "Celebration of successes"
+            ],
+            "behavioral": [
+              "Maintaining focus on client benefit",
+              "Prioritizing client welfare",
+              "Supporting client goals",
+              "Demonstrating patience"
+            ],
+            "attitudinal": [
+              "Genuine care for outcomes",
+              "Desire for client success",
+              "Commitment to helping",
+              "Acceptance of pace"
+            ]
+          }
+        }
+      },
+      "processes": {
+        "engaging": {
+          "description": "Establishing working relationship and alliance",
+          "key_strategies": {
+            "rapport_building": {
+              "techniques": [
+                "Using appropriate open questions",
+                "Demonstrating genuine interest",
+                "Finding common ground",
+                "Showing respect for client experience"
+              ]
+            },
+            "alliance_formation": {
+              "elements": [
+                "Goal agreement",
+                "Task agreement",
+                "Emotional bond",
+                "Role clarity"
+              ]
+            }
+          },
+          "indicators": {
+            "positive": [
+              "Client openness",
+              "Active participation",
+              "Emotional sharing",
+              "Trust demonstrations"
+            ],
+            "negative": [
+              "Guardedness",
+              "Minimal responses",
+              "Hostility",
+              "Disengagement"
+            ]
+          }
+        },
+        "focusing": {
+          "description": "Developing and maintaining direction",
+          "methods": {
+            "agenda_mapping": {
+              "steps": [
+                "Identifying possible topics",
+                "Prioritizing concerns",
+                "Selecting focus",
+                "Maintaining direction"
+              ]
+            },
+            "goal_clarification": {
+              "techniques": [
+                "Values exploration",
+                "Outcome discussion",
+                "Priority setting",
+                "Direction checking"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Training_Assessment_for_practitioners": {
+    "training_development": {
+      "learning_sequence": {
+        "description": "Eight stages in learning motivational interviewing",
+        "stages": {
+          "spirit_acquisition": {
+            "description": "Understanding and embodying core MI spirit",
+            "key_components": [
+              "Partnership development",
+              "Acceptance understanding",
+              "Compassion cultivation",
+              "Evocation mindset"
+            ],
+            "training_methods": [
+              {
+                "method": "Spirit exercises",
+                "description": "Activities demonstrating MI spirit vs authority approaches",
+                "examples": [
+                  "Negative practice demonstrations",
+                  "Monty Roberts video analysis",
+                  "Wrestling vs Dancing metaphor exploration"
+                ]
+              }
+            ]
+          },
+          "oars_mastery": {
+            "description": "Basic client-centered counseling skills",
+            "skill_progression": {
+              "open_questions": {
+                "training_methods": [
+                  "Question transformation exercises",
+                  "Open vs closed categorization",
+                  "Real-play practice"
+                ]
+              },
+              "affirmation": {
+                "training_methods": [
+                  "Strength spotting",
+                  "Affirmation formulation",
+                  "Practice with feedback"
+                ]
+              },
+              "reflective_listening": {
+                "levels": [
+                  {
+                    "level": "Repeating",
+                    "exercises": [
+                      "Word-for-word practice",
+                      "Simple restatement"
+                    ]
+                  },
+                  {
+                    "level": "Rephrasing",
+                    "exercises": [
+                      "Synonym substitution",
+                      "Sentence restructuring"
+                    ]
+                  },
+                  {
+                    "level": "Paraphrasing",
+                    "exercises": [
+                      "Meaning reflection",
+                      "Content elaboration"
+                    ]
+                  },
+                  {
+                    "level": "Emotion reflection",
+                    "exercises": [
+                      "Feeling identification",
+                      "Emotion depth exploration"
+                    ]
+                  }
+                ]
+              },
+              "summarizing": {
+                "training_methods": [
+                  "Collecting summaries",
+                  "Linking summaries",
+                  "Transitional summaries"
+                ]
+              }
+            }
+          },
+          "change_talk_recognition": {
+            "description": "Identifying client language about change",
+            "training_components": {
+              "preparatory_change_talk": {
+                "exercises": [
+                  "DARN coding practice",
+                  "Change talk spotting",
+                  "Audio/video analysis"
+                ]
+              },
+              "mobilizing_change_talk": {
+                "exercises": [
+                  "CAT identification",
+                  "Strength assessment",
+                  "Commitment language recognition"
+                ]
+              }
+            }
+          },
+          "strengthening_change_talk": {
+            "description": "Methods for evoking and reinforcing change talk",
+            "skill_development": {
+              "evocation_methods": {
+                "exercises": [
+                  "Asking evocative questions",
+                  "Using rulers",
+                  "Looking forward/back",
+                  "Values exploration"
+                ]
+              },
+              "reinforcement_strategies": {
+                "exercises": [
+                  "Reflection practice",
+                  "Elaboration requests",
+                  "Affirmation use"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "assessment_methods": {
+        "process_measures": {
+          "MITI": {
+            "description": "Motivational Interviewing Treatment Integrity",
+            "components": {
+              "global_ratings": {
+                "dimensions": [
+                  "Empathy",
+                  "Spirit",
+                  "Collaboration",
+                  "Evocation",
+                  "Autonomy support"
+                ],
+                "scoring": "1-5 scale for each dimension"
+              },
+              "behavior_counts": {
+                "categories": [
+                  "MI-adherent vs MI-non-adherent",
+                  "Question types",
+                  "Reflection types",
+                  "Information giving"
+                ]
+              }
+            }
+          },
+          "MISC": {
+            "description": "MI Skill Code",
+            "components": [
+              "Client behavior coding",
+              "Therapist behavior coding",
+              "Global ratings"
+            ]
+          }
+        },
+        "outcome_indicators": {
+          "client_engagement": {
+            "markers": [
+              "Session attendance",
+              "Participation level",
+              "Change talk frequency",
+              "Homework completion"
+            ]
+          },
+          "behavior_change": {
+            "indicators": [
+              "Goal achievement",
+              "Behavior modification",
+              "Maintenance duration",
+              "Relapse patterns"
+            ]
+          }
+        }
+      },
+      "quality_metrics": {
+        "practitioner_benchmarks": {
+          "beginner_level": {
+            "requirements": [
+              "Global ratings > 3.5",
+              "R:Q ratio > 1:1",
+              "40% complex reflections",
+              "50% open questions",
+              "80% MI consistent"
+            ]
+          },
+          "competent_level": {
+            "requirements": [
+              "Global ratings > 4.0",
+              "R:Q ratio > 2:1",
+              "50% complex reflections",
+              "70% open questions",
+              "90% MI consistent"
+            ]
+          },
+          "expert_level": {
+            "requirements": [
+              "Global ratings > 4.5",
+              "R:Q ratio > 3:1",
+              "60% complex reflections",
+              "80% open questions",
+              "95% MI consistent"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
