@@ -1,0 +1,35 @@
+import { Message, MIMetrics } from "@/types";
+
+export async function sendMessage(message: string): Promise<string> {
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to send message');
+    }
+
+    const data = await response.json();
+    return data.response;
+  } catch (error) {
+    console.error('Error in sendMessage:', error);
+    throw error;
+  }
+}
+
+export async function analyzeResponse(message: string): Promise<MIMetrics> {
+  // This is a placeholder implementation
+  // In a real implementation, this would also be an API call
+  return {
+    reflectionToQuestionRatio: Math.random(),
+    percentComplexReflections: Math.random() * 100,
+    percentOpenQuestions: Math.random() * 100,
+    miAdherentResponses: Math.floor(Math.random() * 10),
+  }
+}

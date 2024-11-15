@@ -1,104 +1,70 @@
-'use client'
+"use client"
 
-import React, { useState, useEffect } from "react"
+import * as React from "react"
+import Image from 'next/image'
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { ChatInterface } from "@/components/ChatInterface"
-import { MIMetrics } from "@/components/MIMetrics"
-import { SessionRecorder } from "@/components/SessionRecorder"
-import { Beaker, Moon, Sun, Mic } from 'lucide-react'
-import { Message, MIMetrics as MIMetricsType } from "@/types"
-import { motion } from "framer-motion"
+import { Mic, Sun, Moon, Beaker } from 'lucide-react'
+import { useTheme } from "next-themes"
+import Chat from "@/components/Chat"  // Import the Chat component
 
-export default function App() {
-  const [isChatStarted, setIsChatStarted] = useState(false)
-  const [user] = useState<{ id: number, username: string }>({ id: 1, username: "User" })
-  const [metrics, setMetrics] = useState<MIMetricsType>({
-    reflectionToQuestionRatio: 0,
-    percentComplexReflections: 0,
-    percentOpenQuestions: 0,
-    miAdherentResponses: 0,
-  })
-  const [chatHistory, setChatHistory] = useState<Message[]>([])
-  const [currentSession, setCurrentSession] = useState<string | null>(null)
-  const [showSessionRecorder, setShowSessionRecorder] = useState(false)
-  const [isRecording, setIsRecording] = useState(false)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const handleMetricsUpdate = (newMetrics: MIMetricsType) => {
-    setMetrics(newMetrics)
-  }
-
-  const handlePlayback = (sessionName: string, messages: Message[]) => {
-    setCurrentSession(sessionName)
-    setChatHistory(messages)
-  }
-
-  const handleToggleSessionRecorder = () => {
-    setShowSessionRecorder(!showSessionRecorder)
-  }
-
-  const toggleRecording = () => {
-    setIsRecording(!isRecording)
-  }
-
-  if (!mounted) {
-    return null // or a loading spinner
-  }
+export default function Home() {
+  const { theme, setTheme } = useTheme()
+  const [isChatStarted, setIsChatStarted] = React.useState(false)
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Beaker className="h-8 w-8 text-primary" />
-            <h1 className="text-xl font-semibold text-primary">VIRTUAL HEALTH LABS</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleRecording}
-              className={isRecording ? 'text-red-500' : ''}
-            >
-              <Mic className="h-5 w-5" />
-            </Button>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+      <header className="border-b border-gray-200 dark:border-gray-800">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-4">
+              <Image src="/VHL.png" alt="VHL Logo" width={40} height={40} className="rounded-full" />
+              <h1 className="text-xl font-semibold text-gray-900 dark:text-white">VIRTUAL HEALTH LABS</h1>
+            </div>
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="default"
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                className="rounded-full"
+              >
+                {theme === "light" ? (
+                  <Moon className="h-5 w-5" />
+                ) : (
+                  <Sun className="h-5 w-5" />
+                )}
+                <span className="sr-only">Toggle theme</span>
+              </Button>
+            </div>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {!isChatStarted ? (
-          <Card className="p-6 max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold mb-4 text-primary">Welcome to MI DOJO, {user.username}</h2>
-            <p className="mb-6">Practice your Motivational Interviewing skills with our AI-powered client simulator.</p>
-            <Button onClick={() => setIsChatStarted(true)}>Start Practice Session</Button>
-          </Card>
+          <div className="max-w-2xl mx-auto text-center transition-opacity duration-300 ease-in-out">
+            <div className="mb-8 flex justify-center">
+              <div className="p-4 rounded-full bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 transition-colors duration-300">
+                <Beaker className="h-16 w-16 text-blue-500 dark:text-blue-400" />
+              </div>
+            </div>
+            <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-200 transition-colors duration-300">
+              Welcome to MI DOJO
+            </h2>
+            <p className="mt-4 text-gray-600 dark:text-gray-400 max-w-lg mx-auto transition-colors duration-300">
+              Practice your Motivational Interviewing skills with our AI-powered client simulator.
+              Get real-time feedback and improve your therapeutic communication skills.
+            </p>
+            <Button
+              onClick={() => setIsChatStarted(true)}
+              size="lg"
+              className="mt-8 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+            >
+              Start Practice Session
+            </Button>
+          </div>
         ) : (
-          <div className="grid md:grid-cols-[1fr,300px] gap-6">
-            <div className="space-y-6">
-              <ChatInterface 
-                onMetricsUpdate={handleMetricsUpdate}
-                setChatHistory={setChatHistory}
-                currentSession={currentSession}
-                onToggleSessionRecorder={handleToggleSessionRecorder}
-              />
-              {showSessionRecorder && (
-                <SessionRecorder 
-                  chatHistory={chatHistory}
-                  onPlayback={handlePlayback}
-                  currentSession={currentSession}
-                  setCurrentSession={setCurrentSession}
-                />
-              )}
-            </div>
-            <div className="space-y-6">
-              <MIMetrics metrics={metrics} />
-            </div>
+          <div className="max-w-5xl mx-auto transition-opacity duration-300 ease-in-out">
+            <Chat />
           </div>
         )}
       </main>
