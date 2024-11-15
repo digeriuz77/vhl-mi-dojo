@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Markdown from "react-markdown";
+import { MIMetrics as MIMetricsComponent } from "./MIMetrics";
+import PersonaCreationForm from "./PersonaCreationForm";
+import { MIMetrics } from "@/types";
 
 type MessageProps = {
   role: "user" | "assistant" | "code";
@@ -56,6 +59,10 @@ export default function Chat() {
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [threadId, setThreadId] = useState<string | null>(null);
+  const [personaId, setPersonaId] = useState<string | null>(null);
+  const [persona, setPersona] = useState<any>(null); // Adjust the type based on your persona structure
+  const [isPersonaSelected, setIsPersonaSelected] = useState<boolean>(false);
+  const [miMetrics, setMiMetrics] = useState<MIMetrics | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -65,6 +72,54 @@ export default function Chat() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const createPersona = async (scenarioType: string, changeReadiness: string) => {
+    try {
+      const response = await fetch("/api/create_persona", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ scenario_type: scenarioType, change_readiness: changeReadiness }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error creating persona: ${errorText}`);
+      }
+
+      const data = await response.json();
+      setPersonaId(data.personaId);
+      setPersona(data.persona);
+      setIsPersonaSelected(true);
+    } catch (error: any) {
+      console.error("Error creating persona:", error);
+      // Handle error (e.g., display an error message to the user)
+    }
+  };
+
+  const analyzeMIMetrics = async (userMessage: string) => {
+    try {
+      const response = await fetch("/api/analyze_mi_metrics", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: userMessage }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error analyzing MI metrics: ${errorText}`);
+      }
+
+      const data = await response.json();
+      setMiMetrics(data.analysis);
+    } catch (error: any) {
+      console.error("Error analyzing MI metrics:", error);
+      // Handle error (e.g., display an error message to the user)
+    }
+  };
 
   const sendMessage = async (text: string) => {
     try {
@@ -79,7 +134,7 @@ export default function Chat() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: text, threadId }),
+        body: JSON.stringify({ message: text, threadId, personaId }),
       });
 
       console.log("Response status:", response.status); // Debug log
@@ -142,6 +197,9 @@ export default function Chat() {
           }
         }
       }
+
+      // After receiving assistant's response, analyze MI metrics
+      await analyzeMIMetrics(text);
     } catch (error: any) {
       console.error("Error:", error);
       setMessages((prev) => [
@@ -166,14 +224,48 @@ export default function Chat() {
     await sendMessage(messageText);
   };
 
+  if (!isPersonaSelected) {
+    return <PersonaCreationForm onCreatePersona={createPersona} />;
+  }
+
   return (
     <div className="flex flex-col h-full bg-white dark:bg-gray-800 text-black dark:text-white rounded-2xl shadow-xl overflow-hidden">
+      {/* Display Persona Details */}
+      <div className="p-4">
+        <h2 className="text-xl font-semibold mb-2">Persona Details</h2>
+        <p>
+          <strong>Name:</strong> {persona?.name}
+        </p>
+        <p>
+          <strong>Age:</strong> {persona?.age}
+        </p>
+        <p>
+          <strong>Background:</strong> {persona?.background}
+        </p>
+        <p>
+          <strong>Health Issue:</strong> {persona?.health_issue}
+        </p>
+        <p>
+          <strong>Change Readiness:</strong> {persona?.change_readiness}
+        </p>
+        <p>
+          <strong>Personality Traits:</strong> {persona?.personality_traits?.join(", ")}
+        </p>
+      </div>
+      {/* Chat Messages */}
       <div className="flex-grow overflow-y-auto p-4 space-y-4 bg-white dark:bg-gray-800">
         {messages.map((msg, index) => (
           <Message key={`message-${index}`} role={msg.role} text={msg.text} />
         ))}
         <div ref={messagesEndRef} />
       </div>
+      {/* MI Metrics */}
+      {miMetrics && (
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+          <MIMetricsComponent metrics={miMetrics} />
+        </div>
+      )}
+      {/* Message Input */}
       <form
         onSubmit={handleSubmit}
         className="p-4 border-t border-gray-200 dark:border-gray-700"

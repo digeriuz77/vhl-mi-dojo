@@ -1,13 +1,45 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import OpenAI from 'openai';
-import { Redis } from '@upstash/redis';
+import { put, get } from '@vercel/blob';
+import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const redis = Redis.fromEnv();
+const ASSISTANT_ID = process.env.ASSISTANT_ID;
 
-const ASSISTANT_ID = 'asst_gbq9LuPZwHpe1IURaRG65WQA'; // Replace with your actual Assistant ID
-const CACHE_TTL = 3600; // Cache for 1 hour
-const ANALYSIS_TIMEOUT = 30000; // 30 seconds timeout
+if (!process.env.OPENAI_API_KEY || !ASSISTANT_ID) {
+  throw new Error('OPENAI_API_KEY or ASSISTANT_ID is not set in environment variables');
+}
+
+const mitiJson = fs.readFileSync(path.join(process.cwd(), 'data/complete-miti-json.json'), 'utf-8');
+const spiritOfMI = fs.readFileSync(path.join(process.cwd(), 'data/spirit_of_MI.txt'), 'utf-8');
+const miKnowledgeBase = fs.readFileSync(path.join(process.cwd(), 'data/mi_knowledge_base.json'), 'utf-8');
+
+const analyzeMIFunctionDefinition = {
+  name: 'analyze_motivational_interviewing',
+  description: 'Analyze a message for MI adherence and provide metrics.',
+  parameters: {
+    type: 'object',
+    properties: {
+      reflectionToQuestionRatio: { type: 'number' },
+      percentComplexReflections: { type: 'number' },
+      percentOpenQuestions: { type: 'number' },
+      miAdherentResponses: { type: 'number' },
+      spiritOfMIAdherence: { type: 'number' },
+      changeTalkIdentification: { 
+        type: 'object',
+        properties: {
+          preparatory: { type: 'array', items: { type: 'string' } },
+          mobilizing: { type: 'array', items: { type: 'string' } }
+        }
+      },
+      overallAdherenceScore: { type: 'number' },
+      reasoning: { type: 'string' }
+    },
+    required: ['reflectionToQuestionRatio', 'percentComplexReflections', 'percentOpenQuestions', 'miAdherentResponses', 'spiritOfMIAdherence', 'changeTalkIdentification', 'overallAdherenceScore', 'reasoning'],
+  },
+};
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -21,18 +53,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    const hash = crypto.createHash('sha256').update(message).digest('hex');
+    const cacheKey = `mi_analysis_${hash}.json`;
+
     // Check cache
-    const cacheKey = `mi_analysis:${message}`;
-    const cachedAnalysis = await redis.get(cacheKey);
-    if (cachedAnalysis) {
-      return res.status(200).json(JSON.parse(cachedAnalysis));
+    try {
+      const response = await get(cacheKey);
+      if (response && response.status === 200) {
+        const cachedAnalysis = await response.json();
+        if (cachedAnalysis) {
+          return res.status(200).json({ data: cachedAnalysis });
+        }
+      }
+    } catch (error) {
+      console.error('Error retrieving from Blob storage:', error);
     }
 
     let thread;
-    if (threadId) {
-      thread = await openai.beta.threads.retrieve(threadId);
-    } else {
-      thread = await openai.beta.threads.create();
+    try {
+      if (threadId) {
+        thread = await openai.beta.threads.retrieve(threadId);
+      } else {
+        thread = await openai.beta.threads.create();
+      }
+    } catch (error) {
+      console.error('Error retrieving or creating thread:', error);
+      return res.status(500).json({ error: 'Error managing conversation thread' });
     }
 
     await openai.beta.threads.messages.create(thread.id, {
@@ -44,24 +90,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       assistant_id: ASSISTANT_ID,
       instructions: `
         Analyze the given message for Motivational Interviewing (MI) adherence.
-        Use the knowledge from the files in your knowledge base:
-        1. complete-miti-json.json
-        2. spirt_of_MI.txt
-        3. mi_knowledge_base.json
+        Use the following knowledge base:
+        1. MITI JSON: ${mitiJson}
+        2. Spirit of MI: ${spiritOfMI}
+        3. MI Knowledge Base: ${miKnowledgeBase}
         
         Use the analyze_motivational_interviewing function to provide a structured analysis.
       `,
+      functions: [analyzeMIFunctionDefinition],
+      function_call: { name: 'analyze_motivational_interviewing' },
     });
 
-    const startTime = Date.now();
+    const maxRetries = 30;
+    let retries = 0;
     let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
-    
-    while (runStatus.status !== "completed") {
-      if (Date.now() - startTime > ANALYSIS_TIMEOUT) {
-        throw new Error('Analysis timeout');
-      }
+
+    while (runStatus.status !== "completed" && retries < maxRetries) {
       await new Promise(resolve => setTimeout(resolve, 1000));
       runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+      retries++;
+    }
+
+    if (runStatus.status !== "completed") {
+      throw new Error('Run did not complete in expected time');
     }
 
     const messages = await openai.beta.threads.messages.list(thread.id);
@@ -71,18 +122,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw new Error('No analysis or function call found');
     }
 
-    const analysis = JSON.parse(analysisMessage.function_call.arguments);
+    let analysis;
+    try {
+      analysis = JSON.parse(analysisMessage.function_call.arguments);
+    } catch (parseError) {
+      console.error('Error parsing function arguments:', parseError);
+      return res.status(500).json({ error: 'Error parsing analysis results' });
+    }
 
-    // Cache the result
-    await redis.set(cacheKey, JSON.stringify({ analysis, threadId: thread.id }), { ex: CACHE_TTL });
+    // Store the result in Blob storage
+    try {
+      await put(cacheKey, JSON.stringify(analysis), { access: 'private' });
+    } catch (error) {
+      console.error('Error storing in Blob storage:', error);
+    }
 
-    res.status(200).json({ analysis, threadId: thread.id });
+    res.status(200).json({ data: analysis, threadId: thread.id });
   } catch (error) {
     console.error('Error analyzing MI metrics:', error);
-    if (error.message === 'Analysis timeout') {
-      res.status(504).json({ error: 'Analysis timed out' });
-    } else {
-      res.status(500).json({ error: 'Error analyzing MI metrics' });
-    }
+    res.status(500).json({ error: 'Error analyzing MI metrics' });
   }
 }
