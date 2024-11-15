@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card"
 import { ChatInterface } from "@/components/ChatInterface"
 import { MIMetrics } from "@/components/MIMetrics"
 import { SessionRecorder } from "@/components/SessionRecorder"
-import { Login } from "@/components/Login"
+// import { Login } from "@/components/Login"
 import { Beaker, Moon, Sun, Mic } from 'lucide-react'
 import { Message, MIMetrics as MIMetricsType } from "@/types"
 import { motion } from "framer-motion"
@@ -18,10 +18,10 @@ try {
   console.warn('next-themes not found, theme functionality will be disabled')
 }
 
-
 export default function App() {
   const [isChatStarted, setIsChatStarted] = useState(false)
-  const [user, setUser] = useState<{ id: number, username: string } | null>(null)
+  // Initialize user with a default value
+  const [user] = useState<{ id: number, username: string }>({ id: 1, username: "User" })
   const [metrics, setMetrics] = useState<MIMetricsType>({
     reflectionToQuestionRatio: 0,
     percentComplexReflections: 0,
@@ -39,10 +39,6 @@ export default function App() {
     if (setTheme) {
       setTheme(theme === 'light' ? 'dark' : 'light')
     }
-  }
-
-  const handleLogin = (loggedInUser: { id: number, username: string }) => {
-    setUser(loggedInUser)
   }
 
   const handleMetricsUpdate = (newMetrics: MIMetricsType) => {
@@ -63,9 +59,10 @@ export default function App() {
     // Implement speech-to-text when ready
   }
 
-  if (!user) {
-    return <Login onLogin={handleLogin} />
-  }
+  // Remove the login check
+  // if (!user) {
+  //   return <Login onLogin={handleLogin} />
+  // }
 
   return (
     <div className={`min-h-screen bg-background text-foreground ${theme}`}>
