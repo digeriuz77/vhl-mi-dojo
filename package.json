@@ -16,7 +16,7 @@
     "clsx": "^2.0.0",
     "encoding": "^0.1.13",
     "lucide-react": "^0.263.1",
-    "next": "13.4.12",
+    "next": "^13.5.7",
     "next-themes": "^0.2.1",
     "openai": "^4.72.0",
     "react": "18.3.1",
