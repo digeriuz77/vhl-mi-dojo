@@ -3,13 +3,21 @@
 import * as React from "react"
 import Image from 'next/image'
 import { Button } from "@/components/ui/button"
-import { Mic, Sun, Moon, Beaker } from 'lucide-react'
+import { Sun, Moon, Beaker } from 'lucide-react'
 import { useTheme } from "next-themes"
-import Chat from "@/components/Chat"  // Import the Chat component
+import Chat from "@/components/AssistantChat"  // Import the Chat component
+import ErrorBoundary from "@/components/ErrorBoundary"  // Import the ErrorBoundary component
 
 export default function Home() {
   const { theme, setTheme } = useTheme()
   const [isChatStarted, setIsChatStarted] = React.useState(false)
+  const [key, setKey] = React.useState(0)
+
+  React.useEffect(() => {
+    if (isChatStarted) {
+      console.log('Chat component should be mounting');
+    }
+  }, [isChatStarted]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
@@ -63,8 +71,12 @@ export default function Home() {
             </Button>
           </div>
         ) : (
-          <div className="max-w-5xl mx-auto transition-opacity duration-300 ease-in-out">
-            <Chat />
+          <div className="max-w-5xl mx-auto transition-opacity duration-300 ease-in-out h-[80vh] border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+            <ErrorBoundary 
+              fallback={<div className="p-4 text-red-500">Something went wrong with the chat. Please refresh the page.</div>}
+            >
+              <AssistantChat key={key} />
+            </ErrorBoundary>
           </div>
         )}
       </main>

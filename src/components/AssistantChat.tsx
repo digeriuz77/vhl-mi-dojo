@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Markdown from 'react-markdown';
+import { useToast } from "@/components/ui/use-toast"
 
 interface Message {
   role: 'user' | 'assistant';
@@ -11,17 +12,15 @@ interface Message {
 }
 
 interface Persona {
-  name: string;
-  age: number;
-  background: string;
-  health_issue: string;
-  change_readiness: string;
-  personality_traits: string[];
+  type: string;
+  text: {
+    value: string;
+  };
 }
 
 const UserMessage = ({ content }: { content: string }) => (
   <div className="bg-blue-100 dark:bg-blue-900 p-2 rounded-lg mb-2 text-black dark:text-white">
-    {content}
+    <p>{content}</p>
   </div>
 );
 
@@ -32,6 +31,7 @@ const AssistantMessage = ({ content }: { content: string }) => (
 );
 
 export default function AssistantChat() {
+  const { toast } = useToast()
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [personaThreadId, setPersonaThreadId] = useState<string | null>(null);
@@ -52,49 +52,30 @@ export default function AssistantChat() {
 
   const createPersona = async () => {
     if (!scenarioType || !changeReadiness) {
-      alert('Please select both scenario type and change readiness');
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Please select both scenario type and change readiness",
+      })
       return;
     }
 
     setIsLoading(true);
     try {
-      const response = await fetch('/api/create-persona', {
+      // Create persona
+      const response = await fetch('/api/create_persona', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scenario_type: scenarioType, change_readiness: changeReadiness }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to create persona');
-      }
-
       const data = await response.json();
-      setPersona(data.persona);
-
-      // Initialize persona assistant
-      const personaThreadResponse = await fetch('/api/create-thread', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ assistantType: 'persona' }),
-      });
-
-      if (!personaThreadResponse.ok) {
-        throw new Error('Failed to initialize persona assistant');
+      if (!response.ok) {
+        throw new Error(`Failed to create persona: ${data.error || 'Unknown error'}`);
       }
 
-      const personaThreadData = await personaThreadResponse.json();
-      setPersonaThreadId(personaThreadData.threadId);
-
-      // Initialize persona
-      await fetch('/api/send-message', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          threadId: personaThreadData.threadId,
-          message: `Initialize as a persona with the following characteristics: ${JSON.stringify(data.persona)}`,
-          assistantId: PERSONA_ASSISTANT_ID,
-        }),
-      });
+      setPersona(data.persona);
+      setPersonaThreadId(data.thread_id);
 
       // Create monitor thread
       const monitorThreadResponse = await fetch('/api/create-thread', {
@@ -110,9 +91,22 @@ export default function AssistantChat() {
       const monitorThreadData = await monitorThreadResponse.json();
       setMonitorThreadId(monitorThreadData.threadId);
 
+      // Set initial message
+      setMessages([{ 
+        role: 'assistant', 
+        content: data.persona.text.value 
+      }]);
+
     } catch (error) {
-      console.error('Error in persona creation process:', error);
-      alert('Failed to set up the chat. Please try again.');
+      console.error('Error in persona creation:', error instanceof Error ? {
+        message: error.message,
+        stack: error.stack
+      } : error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error instanceof Error ? error.message : 'An unknown error occurred',
+      })
     } finally {
       setIsLoading(false);
     }
@@ -141,10 +135,46 @@ export default function AssistantChat() {
         throw new Error('Failed to send message to Persona Assistant');
       }
 
-      const personaData = await personaResponse.json();
-      setMessages(prev => [...prev, { role: 'assistant', content: personaData.response }]);
+      // Set up streaming response handling
+      const reader = personaResponse.body?.getReader();
+      if (!reader) throw new Error('No reader available');
 
-      // Get conversation history
+      let assistantMessage = '';
+      setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = new TextDecoder().decode(value);
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.slice(5));
+              
+              if (data.type === 'message') {
+                assistantMessage = data.content;
+                setMessages(prev => {
+                  const newMessages = [...prev];
+                  newMessages[newMessages.length - 1] = {
+                    role: 'assistant',
+                    content: assistantMessage,
+                  };
+                  return newMessages;
+                });
+              } else if (data.type === 'error') {
+                throw new Error(data.content);
+              }
+            } catch (error) {
+              console.error('Error parsing SSE message:', error);
+            }
+          }
+        }
+      }
+
+      // After streaming is complete, analyze conversation
       const history = await fetch(`/api/get-conversation-history?threadId=${personaThreadId}`);
       const historyData = await history.json();
 
@@ -165,16 +195,6 @@ export default function AssistantChat() {
 
       const monitorData = await monitorResponse.json();
       setFeedback(monitorData.feedback);
-
-      // Update persona
-      await fetch('/api/update-persona', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          threadId: personaThreadId,
-          sessionSummary: JSON.stringify(historyData.history),
-        }),
-      });
 
     } catch (error) {
       console.error('Error in chat process:', error);
@@ -231,17 +251,18 @@ export default function AssistantChat() {
   }
 
   return (
-    <div className="flex h-screen bg-white dark:bg-gray-800 text-black dark:text-white">
-      <Card className="w-2/3 h-full flex flex-col rounded-none">
+    <div className="flex h-full bg-white dark:bg-gray-800 text-black dark:text-white">
+      <Card className="w-2/3 h-full flex flex-col rounded-none border-r border-gray-200 dark:border-gray-700">
         <CardHeader className="border-b border-gray-200 dark:border-gray-700">
           <CardTitle>Chat with AI Persona</CardTitle>
         </CardHeader>
         <CardContent className="flex-grow overflow-auto p-4 space-y-4">
+          {console.log('Current messages:', messages)}
           {messages.map((msg, index) => (
             msg.role === 'user' ? (
-              <UserMessage key={index} content={msg.content} />
+              <UserMessage key={`msg-${index}`} content={msg.content} />
             ) : (
-              <AssistantMessage key={index} content={msg.content} />
+              <AssistantMessage key={`msg-${index}`} content={msg.content} />
             )
           ))}
           <div ref={messagesEndRef} />
@@ -265,18 +286,9 @@ export default function AssistantChat() {
           </div>
         </form>
       </Card>
-      <Card className="w-1/3 h-full flex flex-col rounded-none border-l border-gray-200 dark:border-gray-700">
-        <CardHeader className="border-b border-gray-200 dark:border-gray-700">
-          <CardTitle>MI Adherence Feedback</CardTitle>
-        </CardHeader>
-        <CardContent className="flex-grow overflow-auto p-4">
-          {feedback ? (
-            <div className="p-2 bg-yellow-100 dark:bg-yellow-900 rounded-lg">{feedback}</div>
-          ) : (
-            <p>No feedback available yet.</p>
-          )}
-        </CardContent>
-      </Card>
+      <div className="w-1/3">
+        {/* Space for future sidebar content */}
+      </div>
     </div>
   );
 }

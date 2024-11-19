@@ -1,82 +1,168 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import OpenAI from 'openai';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-const createPersonaFunctionDefinition = {
-  name: 'create_persona',
-  description: 'Create a persona for Motivational Interviewing practice',
-  parameters: {
-    type: 'object',
-    properties: {
-      name: { type: 'string' },
-      age: { type: 'number' },
-      background: { type: 'string' },
-      health_issue: { type: 'string' },
-      change_readiness: { type: 'string', enum: ['pre-contemplation', 'contemplation', 'preparation', 'action', 'maintenance'] },
-      personality_traits: { type: 'array', items: { type: 'string' } },
-    },
-    required: ['name', 'age', 'background', 'health_issue', 'change_readiness', 'personality_traits'],
-  },
-};
-
-const validScenarioTypes = ['chronic_illness', 'addiction', 'lifestyle_change', 'mental_health', 'preventive_care'];
-const validChangeReadiness = ['pre-contemplation', 'contemplation', 'preparation', 'action', 'maintenance'];
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Input validation
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  if (!process.env.OPENAI_API_KEY) {
-    return res.status(500).json({ error: 'OpenAI API key not configured' });
-  }
-
   const { scenario_type, change_readiness } = req.body;
-
-  if (!validScenarioTypes.includes(scenario_type)) {
-    return res.status(400).json({ error: 'Invalid scenario_type provided' });
+  
+  if (!scenario_type || !change_readiness) {
+    return res.status(400).json({ 
+      error: 'Missing required fields',
+      details: {
+        scenario_type: !scenario_type ? 'missing' : 'present',
+        change_readiness: !change_readiness ? 'missing' : 'present'
+      }
+    });
   }
 
-  if (!validChangeReadiness.includes(change_readiness)) {
-    return res.status(400).json({ error: 'Invalid change_readiness provided' });
+  // Assistant ID validation
+  const ASSISTANT_ID = process.env.NEXT_PUBLIC_PERSONA_ASSISTANT_ID;
+  if (!ASSISTANT_ID) {
+    console.error('Assistant ID not configured');
+    return res.status(500).json({ 
+      error: 'Configuration error',
+      details: 'Assistant ID not found in environment variables'
+    });
   }
 
   try {
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4-0613',
-      messages: [
-        {
-          role: 'system',
-          content: 'You are to create a persona for MI practice.',
-        },
-        {
-          role: 'user',
-          content: `Create a persona for a ${scenario_type} scenario with ${change_readiness} change readiness.`,
-        },
-      ],
-      functions: [createPersonaFunctionDefinition],
-      function_call: { name: 'create_persona' },
+    console.log('Starting persona creation with:', {
+      scenario_type,
+      change_readiness,
+      assistant_id: ASSISTANT_ID
     });
 
-    const functionCall = response.choices[0].message.function_call;
-    if (functionCall && functionCall.name === 'create_persona') {
-      let persona;
-      try {
-        persona = JSON.parse(functionCall.arguments);
-      } catch (parseError) {
-        console.error('Error parsing function call arguments:', parseError);
-        return res.status(500).json({ error: 'Error parsing persona data' });
+    // Verify assistant exists
+    try {
+      const assistant = await openai.beta.assistants.retrieve(ASSISTANT_ID);
+      console.log('Assistant verified:', assistant.id);
+    } catch (error: any) {
+      console.error('Failed to verify assistant:', error);
+      return res.status(500).json({
+        error: 'Assistant verification failed',
+        details: error.message
+      });
+    }
+
+    // Create thread
+    let thread;
+    try {
+      thread = await openai.beta.threads.create();
+      console.log('Thread created:', thread.id);
+    } catch (error: any) {
+      console.error('Failed to create thread:', error);
+      return res.status(500).json({
+        error: 'Thread creation failed',
+        details: error.message
+      });
+    }
+
+    // Add message
+    try {
+      await openai.beta.threads.messages.create(thread.id, {
+        role: "user",
+        content: `Create a persona for a ${scenario_type} scenario with ${change_readiness} change readiness.`
+      });
+      console.log('Message added to thread');
+    } catch (error: any) {
+      console.error('Failed to add message:', error);
+      return res.status(500).json({
+        error: 'Message creation failed',
+        details: error.message
+      });
+    }
+
+    // Run assistant
+    let run;
+    try {
+      run = await openai.beta.threads.runs.create(thread.id, {
+        assistant_id: ASSISTANT_ID,
+      });
+      console.log('Run created:', run.id);
+    } catch (error: any) {
+      console.error('Failed to create run:', error);
+      return res.status(500).json({
+        error: 'Run creation failed',
+        details: error.message
+      });
+    }
+
+    // Poll for completion
+    let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+    console.log('Initial run status:', runStatus.status);
+    
+    const startTime = Date.now();
+    const TIMEOUT = 30000; // 30 second timeout
+
+    while (runStatus.status === 'queued' || runStatus.status === 'in_progress') {
+      if (Date.now() - startTime > TIMEOUT) {
+        console.error('Run timed out');
+        return res.status(500).json({
+          error: 'Run timed out',
+          details: `Run did not complete within ${TIMEOUT/1000} seconds`
+        });
       }
 
-      const personaId = `persona_${Date.now()}`; // Generate a unique ID
-      // Here you would typically save the persona to a database
-      // For now, we'll just return it
-      res.status(200).json({ personaId, persona });
-    } else {
-      throw new Error('Unexpected response from OpenAI');
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+      console.log('Updated run status:', runStatus.status);
+      
+      if (runStatus.status === 'failed' || runStatus.status === 'expired' || runStatus.status === 'cancelled') {
+        console.error('Run failed with status:', runStatus.status);
+        return res.status(500).json({
+          error: 'Run failed',
+          details: {
+            status: runStatus.status,
+            error: runStatus.last_error?.message
+          }
+        });
+      }
     }
-  } catch (error) {
-    console.error('Error creating persona:', error);
-    res.status(500).json({ error: error.message || 'Error creating persona' });
+
+    // Get messages
+    const messages = await openai.beta.threads.messages.list(thread.id);
+    console.log('Retrieved messages count:', messages.data.length);
+
+    if (messages.data.length === 0) {
+      return res.status(500).json({
+        error: 'No response',
+        details: 'No messages received from assistant'
+      });
+    }
+
+    const lastMessage = messages.data[0];
+    console.log('Last message full content:', JSON.stringify(lastMessage, null, 2));
+    console.log('Content being sent:', JSON.stringify(lastMessage.content[0], null, 2));
+    console.log('Successful response with thread ID:', thread.id);
+    
+    return res.status(200).json({
+      persona: lastMessage.content[0],
+      thread_id: thread.id
+    });
+
+  } catch (error: any) {
+    console.error('Unhandled error in persona creation:', {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      response: error.response?.data
+    });
+    
+    return res.status(500).json({
+      error: 'Unhandled error',
+      details: {
+        message: error.message,
+        type: error.name,
+        response: error.response?.data
+      }
+    });
   }
 }
